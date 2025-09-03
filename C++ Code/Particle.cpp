@@ -1,0 +1,34 @@
+#include "Particle.h"
+
+Particle::Particle(float mass_, float x_pos_, float y_pos_, float radius_, float vel_x_, float vel_y_)
+{
+    mass = mass_;
+    x_pos = x_pos_;
+    y_pos = y_pos_;
+    radius = radius_;
+    vel_x = vel_x_;
+    vel_y = vel_y_;
+}
+
+std::pair<float, float> Particle::get_pos()
+{
+    std::pair<float, float> temp = {x_pos, y_pos};
+    return temp;
+}
+
+void Particle::update_pos()
+{
+    x_pos += vel_x;
+    y_pos += vel_y;
+}
+
+void Particle::update_velocity(float dvel_x, float dvel_y)
+{
+    vel_x += dvel_x;
+    vel_y += dvel_y;
+}
+
+float Particle::get_mass()
+{
+    return mass;
+}
