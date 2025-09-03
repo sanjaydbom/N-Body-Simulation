@@ -7,7 +7,7 @@ class WrongArrayDimError(ValueError):
     pass
 
 class NBodySim():
-    def __init__(self, fig, ax: axes._axes.Axes, num_particles = 10, min = -10000, max = 10000, mass = 100, G = 100, time_step = 1, positions = None, velocities = None, radius = 100):
+    def __init__(self, fig, ax: axes._axes.Axes, num_particles = 10, min = -10000, max = 10000, mass = 100, G = 100, time_step = 1, positions = None, velocities = None, radius = 100, friction = 0):
         self.fig = fig
         self.ax = ax
 
@@ -19,7 +19,7 @@ class NBodySim():
         self.dt = time_step
         self.G = G
         self.radius = radius
-        self.friction = 0
+        self.friction = friction
 
         self.ax.set_xlim(self.min, self.max)
         self.ax.set_ylim(self.min, self.max)
@@ -56,7 +56,7 @@ class NBodySim():
 
     def update_velocity(self):
         #Only updates a half step
-        self.velocities = self.accelerations * self.dt / 2 + self.velocities
+        self.velocities = self.accelerations * self.dt / 2 + self.velocities * (1-self.friction)
 
 
     def update_position(self):
