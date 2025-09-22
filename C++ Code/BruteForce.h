@@ -14,4 +14,6 @@ private:
     void updateVelocity();
     void updatePosition();
     void calculateAccelerations();
+    void checkCollisions();
+    float dot_product(float* array1, float* array2);
 };

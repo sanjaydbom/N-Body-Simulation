@@ -61,6 +61,7 @@ void BruteForce::updatePosition()
     {
         p.update_pos();
     }
+    checkCollisions();
 }
 
 void BruteForce::step()
@@ -79,4 +80,81 @@ void BruteForce::getPositions(float* pos_arr)
         pos_arr[3 * i + 0] /= (X_LENGTH / 2);
         pos_arr[3 * i + 1] /= (Y_LENGTH / 2);
     }
+}
+
+void BruteForce::checkCollisions()
+{
+    float particle1[3];
+    float particle2[3];
+    bool changed = false;
+    for(int i = 0; i < particles.size(); i++)
+    {
+        for(int j = i+1; j < particles.size(); j++)
+        {
+            particles[i].get_pos(particle1);
+            particles[j].get_pos(particle2);
+
+            if(std::pow(particle2[0] - particle1[0], 2) + std::pow(particle2[1] - particle1[1], 2) <= std::pow(particles[j].get_radius() + particles[i].get_radius(), 2))
+            {
+                changed = true;
+
+                std::cout << "Collided!\n";
+
+                float newBasisVectorI[3] = {0.0, 0.0, 0.0};
+                float newBasisVectorJ[3] = {0.0, 0.0, 0.0};
+
+                float V1_I[3];
+                float V2_I[3];
+
+                particles[i].get_velocity(V1_I);
+                particles[j].get_velocity(V2_I);
+                
+                //change coordinate system so that the 2 particles collide only on the x-axis
+                newBasisVectorI[0] = particle2[0] - particle1[0];
+                newBasisVectorI[1] = particle2[1] - particle1[1];
+
+                //normalize
+                float size = std::pow(std::pow(newBasisVectorI[0], 2) + std::pow(newBasisVectorI[1], 2), 0.5);
+
+                newBasisVectorI[0] /= size;
+                newBasisVectorI[1] /= size;
+                
+                //get orthogonal vector for y axis
+                newBasisVectorJ[0] = -1 * newBasisVectorI[1];
+                newBasisVectorJ[1] = newBasisVectorI[0];
+
+                float NEW_V1_X_I = dot_product(newBasisVectorI, V1_I);
+                float NEW_V2_X_I = dot_product(newBasisVectorI, V2_I);
+
+                float NEW_V1_Y = dot_product(newBasisVectorJ, V1_I);
+                float NEW_V2_Y = dot_product(newBasisVectorJ, V2_I);
+
+                float NEW_V1_X_F = (particles[i].get_mass() - particles[j].get_mass()) * NEW_V1_X_I + 2 * particles[j].get_mass() * NEW_V2_X_I / (particles[i].get_mass() + particles[j].get_mass());
+                float NEW_V2_X_F = (particles[j].get_mass() - particles[i].get_mass()) * NEW_V2_X_I + 2 * particles[i].get_mass() * NEW_V1_X_I / (particles[i].get_mass() + particles[j].get_mass());
+
+                float V1_X = NEW_V1_X_F * newBasisVectorI[0] + NEW_V1_Y * newBasisVectorJ[0];
+                float V1_Y = NEW_V1_X_F * newBasisVectorI[1] + NEW_V1_Y * newBasisVectorJ[1];
+
+                float V2_X = NEW_V2_X_F * newBasisVectorI[0] + NEW_V2_Y * newBasisVectorJ[0];
+                float V2_Y = NEW_V2_X_F * newBasisVectorI[1] + NEW_V2_Y * newBasisVectorJ[1];
+
+                float dV1_X = V1_X - V1_I[0];
+                float dV1_Y = V1_Y - V1_I[1];
+                float dV2_X = V2_X - V2_I[0];
+                float dV2_Y = V2_Y - V2_I[1];
+
+                particles[i].update_velocity(dV1_X, dV1_Y);
+                particles[j].update_velocity(dV2_X, dV2_Y);
+            } 
+        }
+    }
+    if(changed)
+    {
+        updatePosition();
+    }
+}
+
+float BruteForce::dot_product(float* array1, float* array2)
+{
+    return array1[0] * array2[0] + array1[1] * array2[1] + array1[2] * array2[2];
 }

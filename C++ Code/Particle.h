@@ -11,6 +11,8 @@ public:
     void update_pos();
     void update_velocity(float dvel_x, float dvel_y);
     float get_mass();
+    float get_radius();
+    void get_velocity(float* array);
 
 private:
     float mass;

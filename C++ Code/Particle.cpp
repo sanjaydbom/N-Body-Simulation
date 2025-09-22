@@ -34,3 +34,15 @@ float Particle::get_mass()
 {
     return mass;
 }
+
+float Particle::get_radius()
+{
+    return radius;
+}
+
+void Particle::get_velocity(float* array)
+{
+    array[0] = vel_x;
+    array[1] = vel_y;
+    array[2] = 0.0;
+}
