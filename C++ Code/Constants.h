@@ -7,7 +7,7 @@ const float X_LENGTH = 800; //m
 const float Y_LENGTH = 600; //m
 
 //Simulation Constants
-const float G = 0.0000003; //N * (m / kg) ^ 2
+const float G = 0.1; //N * (m / kg) ^ 2
 const int NUM_PARTICLES = 2;
 
 //Visualization Constants

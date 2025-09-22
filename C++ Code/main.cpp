@@ -36,6 +36,9 @@ int main()
     float pos_arr[3 * NUM_PARTICLES];
     bf.getPositions(pos_arr);
 
+    //for(int i = 0; i < NUM_PARTICLES; i++)
+    //    std::cout << pos_arr[3 * i] << " " << pos_arr[3 * i + 1] << "\n";
+
 
     std::cout << "Starting rendering\n";
     while(GUI.render(pos_arr, radii)){

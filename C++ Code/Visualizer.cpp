@@ -1,5 +1,5 @@
-#define _USE_MATH_DEFINES
 #include "Visualizer.h"
+#include <vector>
 #include <stdexcept>
 #include <cmath>
 #include <numbers>
@@ -134,31 +134,42 @@ bool Visualizer::render(const float* centers, const float* radii)
     glClear(GL_COLOR_BUFFER_BIT);
 
     //create arrays to store the vertices and the order to draw the triangles
-    float vertices[3 * (1 + precision) * numCircles];
-    int order[3 * precision * numCircles];
+    std::vector<float> vertices(3 * (1 + precision) * numCircles);
+    std::vector<int> order(3 * precision * numCircles);
 
     //create the circles
     for(int i = 0; i < numCircles; i++)
     {
-        make_circle(centers + 3 * i, vertices + 3 * (1 + precision) * i, order + 3 * precision * i, radii[i], (precision + 1) * i);
+        make_circle(centers + 3 * i, vertices, order, radii[i],i);
     }
     //std::cout << sizeof(vertices) / 3 / sizeof(vertices[0]) << " " << sizeof(order) / sizeof(int) / 3 << "\n";
-    /*for(int i = 0; i < 3 * (precision); i++)
+
+    /*for(int i = 0; i < 3 * (1 + precision) * numCircles; i++)
     {
         if((i+1) % 3 == 0)
-            std::cout << order[3 * precision + i] << "\n";
-        else std::cout << order[i + 3 * (precision)] << " ";
+            std::cout << "\n";
+        else std::cout << vertices[i] << " ";
+    }
+    std::cout << "\nasdfasd\n";*/
+
+    /*for(int i = 0; i < 3 * (precision) * numCircles; i++)
+    {
+        if((i+1) % 3 == 0)
+            std::cout << order[i]<< "\n";
+        else std::cout << order[i] << " ";
     }*/
+
+    //std::cout << sizeof(vertices) << " " << vertices.size() * sizeof(float) << "\n";
 
     //std::cout << vertices[12] << " " << vertices[13] << " " << vertices[14] << "\n";
 
     //load the vertex data into the GPU
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(float), reinterpret_cast<float*>(vertices.data()));
 
     //load the order of the drawings into the GPU
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(order), order);
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, order.size() * sizeof(int), reinterpret_cast<int*>(order.data()));
 
     //draw triangle
     glUseProgram(shaderProgram);
@@ -173,25 +184,26 @@ bool Visualizer::render(const float* centers, const float* radii)
 }
 
 //makes an individual circle
-void Visualizer::make_circle(const float* center, float* vertices, int* order, const float radius, const int offset)
+void Visualizer::make_circle(const float* center, std::vector<float>& vertices, std::vector<int>& order, const float radius, const int offset)
 {
+    int verticesOffset = 3 * (precision + 1) * offset;
     //set the center of the circle as the first vertex (x,y,z)
-    vertices[0] = center[0];
-    vertices[1] = center[1];
-    vertices[2] = 0.0f;
+    vertices[0 + verticesOffset] = center[0];
+    vertices[1 + verticesOffset] = center[1];
+    vertices[2 + verticesOffset] = 0.0f;
     //Approximate circle by drawing a bunch of triangles from the center of the circle to the edges
     for(int i = 0; i < precision; i++)
     {
-        float angle = i * 2.0 * pi / precision;
-        vertices[3 * (i + 1) + 0] = center[0] + radius * std::cos(angle);
-        vertices[3 * (i + 1) + 1] = center[1] + radius * std::sin(angle);
-        vertices[3 * (i + 1) + 2] = 0.0f;
+        float angle = i * 2.0 * std::numbers::pi_v<float> / precision;
+        vertices[3 * (i + 1) + 0 + verticesOffset] = center[0] + radius * std::cos(angle);
+        vertices[3 * (i + 1) + 1 + verticesOffset] = center[1] + radius * std::sin(angle);
+        vertices[3 * (i + 1) + 2 + verticesOffset] = 0.0f;
     }
-    
+    int orderOffset = 3 * offset * precision;
     for(int i = 0; i < precision; i++)
     {
-        order[3 * i + 0] = 0 + offset;
-        order[3 * i + 1] = i + 1 + offset;
-        order[3 * i + 2] = (i + 1) % precision + 1 + offset;
+        order[3 * i + 0 + orderOffset] = 0 + verticesOffset / 3;
+        order[3 * i + 1 + orderOffset] = i + 1 + verticesOffset / 3;
+        order[3 * i + 2 + orderOffset] = ((i + 1) % precision) + 1 + verticesOffset / 3;
     }
 }
