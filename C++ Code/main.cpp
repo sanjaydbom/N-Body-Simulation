@@ -16,7 +16,7 @@ std::vector<Particle> createNParticles(int N)
     std::vector<Particle> temp;
     for(int i = 0; i < N; i++)
     {
-        Particle p(100,distr(eng), distr(eng), 1, 0, 0);
+        Particle p(1,distr(eng), distr(eng), 1, 0, 0);
         temp.push_back(p);
     }
     return temp;
@@ -34,7 +34,7 @@ int main()
 
     BruteForce bf(particles);
 
-    float bgColor[] = {1.0,0.0,0.0,1.0};
+    float bgColor[] = {0.0,0.0,0.0,1.0};
     float oColor[] = {1.0,1.0,1.0,1.0};
     Visualizer GUI(800,600,bgColor, oColor, 50, 2);
     float pos_arr[3 * N];
@@ -43,7 +43,11 @@ int main()
     std::cout << pos_arr[0] << " " << pos_arr[1] << "\n" << pos_arr[3] << " " << pos_arr[4] << "\n";
 
     std::cout << "Starting rendering\n";
-    while(GUI.render(pos_arr, radii));
+    int i = 0;
+    while(GUI.render(pos_arr, radii)){
+            bf.step();
+            bf.getPositions(pos_arr);
+    }
     std::cout << "Rendering done\n";
     return 0;
 

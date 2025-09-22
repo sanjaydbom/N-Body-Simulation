@@ -10,7 +10,7 @@ public:
 private:
     std::vector<Particle> particles;
     std::vector<std::pair<float, float>> accel;
-    float G = 1.0;
+    float G = 0.0000003;
     void updateVelocity();
     void updatePosition();
     void calculateAccelerations();
