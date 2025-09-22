@@ -10,7 +10,7 @@ Simulation: main.o Particle.o Visualizer.o BruteForce.o glad.o
 	@rm -f $(OBJECTS)
 	@./$(EXEC)
 
-main.o: main.cpp Particle.h BruteForce.h Visualizer.h
+main.o: main.cpp Particle.h BruteForce.h Visualizer.h Constants.h
 	@$(CC) $(CFLAGS) -c main.cpp
 
 Particle.o: Particle.cpp Particle.h
@@ -19,7 +19,7 @@ Particle.o: Particle.cpp Particle.h
 Visualizer.o: Visualizer.cpp Visualizer.h
 	@$(CC) $(CFLAGS) -c Visualizer.cpp
 
-BruteForce.o: BruteForce.cpp BruteForce.h
+BruteForce.o: BruteForce.cpp BruteForce.h Constants.h
 	@$(CC) $(CFLAGS) -c BruteForce.cpp
 
 glad.o: glad.c

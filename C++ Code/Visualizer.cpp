@@ -4,7 +4,7 @@
 #include <cmath>
 #include <numbers>
 
-Visualizer::Visualizer(int width, int height, float* bgColor, float* oColor, int m_precision, int m_num_circles, std::string title) : precision(m_precision), numCircles(m_num_circles)
+Visualizer::Visualizer(const int width, const int height, const float* bgColor, const float* oColor, const int m_precision, const int m_num_circles, const std::string title) : precision(m_precision), numCircles(m_num_circles)
 {
     //Initialize glfw
     glfwInit();
@@ -26,7 +26,6 @@ Visualizer::Visualizer(int width, int height, float* bgColor, float* oColor, int
     glfwMakeContextCurrent(window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Cooked";
         throw std::runtime_error("Error initializing GLAD. Check system configurations and libraries");
     }
 

@@ -8,7 +8,7 @@
 class Visualizer
 {
     public:
-        Visualizer(int width = 800, int height = 600, float* bgColor = nullptr, float* oColor = nullptr, int m_precision = 50, int m_num_circles = 1, std::string title = "My OpenGL Window");
+        Visualizer(const int width = 800, const int height = 600, const float* bgColor = nullptr, const float* oColor = nullptr, const int m_precision = 50, const int m_num_circles = 1, const std::string title = "My OpenGL Window");
         bool render(const float* centers, const float* radii);
     private:
         void make_circle(const float* center, float* vertices, int* order, const float radius, const int offset);
@@ -16,7 +16,7 @@ class Visualizer
         GLFWwindow* window;
         unsigned int VBO, VAO, EBO;
         unsigned int shaderProgram;
-        float* backgroundColor;
+        const float* backgroundColor;
         int precision;
         int numCircles;
         GLint aspectRatioUniformLocation;

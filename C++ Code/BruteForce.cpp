@@ -1,4 +1,5 @@
 #include "BruteForce.h"
+#include "Constants.h"
 #include <cmath>
 
 BruteForce::BruteForce(std::vector<Particle>& p) : accel(p.size())
@@ -21,8 +22,8 @@ void BruteForce::calculateAccelerations()
             particles[i].get_pos(particle1);
             particles[j].get_pos(particle2);
 
-            std::cout << particle1[0] << " " << particle1[1] << "\n";
-            std::cout << particle2[0] << " " << particle2[1] << "\n";
+            //std::cout << particle1[0] << " " << particle1[1] << "\n";
+            //std::cout << particle2[0] << " " << particle2[1] << "\n";
 
             dx = particle2[0] - particle1[0]; // final - initial
             dy = particle2[1] - particle1[1];
@@ -40,8 +41,8 @@ void BruteForce::calculateAccelerations()
             accel[i].second += a1 * sin(theta);
             accel[j].first -= a2 * cos(theta); //Newton's Third Law
             accel[j].second -= a2 * sin(theta); //Newton's Third Law
-            std::cout << accel[i].first << " " << accel[i].second << "\n";
-            std::cout << accel[j].first << " " << accel[j].second << "\n";
+            //std::cout << accel[i].first << " " << accel[i].second << "\n";
+            //std::cout << accel[j].first << " " << accel[j].second << "\n";
         }
     }
 }
@@ -75,5 +76,7 @@ void BruteForce::getPositions(float* pos_arr)
     for(int i = 0; i < particles.size(); i++)
     {
         particles[i].get_pos(pos_arr + 3 * i);
+        pos_arr[3 * i + 0] /= (X_LENGTH / 2);
+        pos_arr[3 * i + 1] /= (Y_LENGTH / 2);
     }
 }
