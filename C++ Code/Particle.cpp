@@ -5,15 +5,17 @@ Particle::Particle(float mass_, float x_pos_, float y_pos_, float radius_, float
     mass = mass_;
     x_pos = x_pos_;
     y_pos = y_pos_;
+    z_pos = 0.0;
     radius = radius_;
     vel_x = vel_x_;
     vel_y = vel_y_;
 }
 
-std::pair<float, float> Particle::get_pos()
+void Particle::get_pos(float* pos)
 {
-    std::pair<float, float> temp = {x_pos, y_pos};
-    return temp;
+    pos[0] = x_pos;
+    pos[1] = y_pos;
+    pos[2] = 0.0;
 }
 
 void Particle::update_pos()

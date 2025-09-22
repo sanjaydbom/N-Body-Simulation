@@ -11,17 +11,18 @@ void BruteForce::calculateAccelerations()
 {
     std::pair<float,float> zero_pair(0,0);
     std::fill(accel.begin(), accel.end(), zero_pair);
-    std::pair<float, float> particle1, particle2;
+    float particle1[3];
+    float particle2[3];
     float dx, dy, r, F, a1, a2, theta;
     for(int i = 0; i < particles.size(); i++)
     {
         for(int j = i+1; j < particles.size(); j++)
         {
-            particle1 = particles[i].get_pos();
-            particle2 = particles[j].get_pos();
+            particles[i].get_pos(particle1);
+            particles[j].get_pos(particle2);
 
-            dx = particle2.first - particle1.first; // final - initial
-            dy = particle2.second - particle1.second;
+            dx = particle2[0] - particle1[0]; // final - initial
+            dy = particle2[1] - particle1[1];
 
             r = dx * dx + dy * dy;
             F = G / (r + 0.0001); //F = G * m1 * m2 / r, but I removed m1 and m2, because I need to multiply them
@@ -62,4 +63,12 @@ void BruteForce::step()
     updatePosition();
     calculateAccelerations();
     updateVelocity();
+}
+
+void BruteForce::getPositions(float* pos_arr)
+{
+    for(int i = 0; i < particles.size(); i++)
+    {
+        particles[i].get_pos(pos_arr + 3 * i);
+    }
 }

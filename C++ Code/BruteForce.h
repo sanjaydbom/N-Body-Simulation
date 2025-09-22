@@ -5,6 +5,7 @@ class BruteForce{
 public:
     BruteForce(std::vector<Particle>& p);
     void step();
+    void getPositions(float* pos_arr);
 
 private:
     std::vector<Particle> particles;

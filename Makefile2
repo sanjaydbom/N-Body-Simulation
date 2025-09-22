@@ -57,10 +57,10 @@ RM = /opt/homebrew/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/sanjay/Desktop/Open_GL
+CMAKE_SOURCE_DIR = /Users/sanjay/Desktop/N-Body\ Simulation/C++\ Code
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/sanjay/Desktop/Open_GL/my_project_build
+CMAKE_BINARY_DIR = /Users/sanjay/Desktop/N-Body\ Simulation/C++\ Code/my_project_build
 
 #=============================================================================
 # Targets provided globally by CMake.

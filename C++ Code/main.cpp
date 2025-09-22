@@ -1,55 +1,51 @@
-/*#include <iostream>
-#include <cstdlib>
-#include <ctime>
+#include <iostream>
+#include <random>
+#include <chrono>
 #include "Particle.h"
 #include "BruteForce.h"
+#include "Visualizer.h"
 
 
-
-int main()
-{
-    srand(time(0));
-    std::vector<Particle> particles = createNParticles(2);
-
-    BruteForce bf(particles);
-
-    for(int i = 0; i < 100; i++)
-    {
-        bf.step();
-    }
-
-
-}
 
 std::vector<Particle> createNParticles(int N)
 {
+    std::mt19937 eng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+    float min_val = 0.0f;
+    float max_val = 1.0f;
+    std::uniform_real_distribution<float> distr(min_val, max_val);
     std::vector<Particle> temp;
     for(int i = 0; i < N; i++)
     {
-        Particle p(100,rand() % 100, rand() % 100, 1, 0, 0);
+        Particle p(100,distr(eng), distr(eng), 1, 0, 0);
         temp.push_back(p);
     }
     return temp;
-}*/
-#include "Visualizer.h"
+}
 
-int main(){
-    float bgColor[] = {0.0,0.0,0.0,1.0};
+int main()
+{
+    const int N = 2;
+    std::vector<Particle> particles = createNParticles(N);
+    float radii[N];
+    for(int i = 0; i < N; i++)
+    {
+        radii[i] = 0.05f;
+    }
+
+    BruteForce bf(particles);
+
+    float bgColor[] = {1.0,0.0,0.0,1.0};
     float oColor[] = {1.0,1.0,1.0,1.0};
     Visualizer GUI(800,600,bgColor, oColor, 50, 2);
+    float pos_arr[3 * N];
+    bf.getPositions(pos_arr);
 
-    const float center[] = {
-        0.0f, 0.0f, 0.0f, //center 1
-        0.35f, 0.0f, 0.0f //center 2
-    };
-    const float radii[] = {
-        0.25f,
-        0.10f
-    };
-
+    std::cout << pos_arr[0] << " " << pos_arr[1] << "\n" << pos_arr[3] << " " << pos_arr[4] << "\n";
 
     std::cout << "Starting rendering\n";
-    while(GUI.render(center, radii));
+    while(GUI.render(pos_arr, radii));
     std::cout << "Rendering done\n";
     return 0;
+
+
 }

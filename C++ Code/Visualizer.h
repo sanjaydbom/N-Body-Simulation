@@ -21,6 +21,7 @@ class Visualizer
         int numCircles;
         GLint aspectRatioUniformLocation;
         float aspectRatio;
+        float pi = 3.141592653589793;
 };
 
 #endif

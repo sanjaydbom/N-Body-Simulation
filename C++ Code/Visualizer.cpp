@@ -183,7 +183,7 @@ void Visualizer::make_circle(const float* center, float* vertices, int* order, c
     //Approximate circle by drawing a bunch of triangles from the center of the circle to the edges
     for(int i = 0; i < precision; i++)
     {
-        float angle = i * 2.0 * std::numbers::pi_v<float> / precision;
+        float angle = i * 2.0 * pi / precision;
         vertices[3 * (i + 1) + 0] = center[0] + radius * std::cos(angle);
         vertices[3 * (i + 1) + 1] = center[1] + radius * std::sin(angle);
         vertices[3 * (i + 1) + 2] = 0.0f;
